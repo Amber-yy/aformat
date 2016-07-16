@@ -65,25 +65,25 @@ int AFormat::printf(char *des, const char *fStr, ...)
 	while (*s!=0)
 	{
 		q = s;
-		/*´¦ÀíÆÕÍ¨×Ö·û´®*/
+		/*å¤„ç†æ™®é€šå­—ç¬¦ä¸²*/
 		strHandle(q, s, tempBuffer);
 
-		/*Óöµ½¸ñÊ½¿ØÖÆ×Ö·û*/
+		/*é‡åˆ°æ ¼å¼æ§åˆ¶å­—ç¬¦*/
 		if (*s == '%')
 		{
 			s++;
 			info.reSet();
 			int len=0,digit=0;
 
-			/*flagÇø¶Î*/
+			/*flagåŒºæ®µ*/
 			flagHandle(s, info);
 
-			/*¾«¶È¡¢³¤¶ÈÇø¶Î*/
+			/*ç²¾åº¦ã€é•¿åº¦åŒºæ®µ*/
 			digitHandle(s, len, digit);
 			info.len = (len==0)?(-1):len;
 			info.digit = (digit == 0) ? (6) : digit;
 
-			/*ÊÇ·ñÎŞ·ûºÅ*/
+			/*æ˜¯å¦æ— ç¬¦å·*/
 			if (*s == 'u')
 			{
 				info.isUnsigned = true;
@@ -91,17 +91,17 @@ int AFormat::printf(char *des, const char *fStr, ...)
 				s++;
 			}
 
-			/*ÊÇ·ñÎª¡°³¤¡±ĞÍ*/
+			/*æ˜¯å¦ä¸ºâ€œé•¿â€å‹*/
 			if (*s == 'l')
 			{
 				info.isLong = true;
 				s++;
 			}
 	
-			/*¾ßÌå¿ØÖÆ×Ö·û*/
+			/*å…·ä½“æ§åˆ¶å­—ç¬¦*/
 			typeHandle(s, info);
 
-			/*´¦Àí¸ñÊ½·ÖÎö½á¹û*/
+			/*å¤„ç†æ ¼å¼åˆ†æç»“æœ*/
 			if (info.type == inte)
 			{
 				integerHandle(tempBuffer, info, args,tempStr);
@@ -223,6 +223,12 @@ void AFormat::ptrHandle(char *&tempBuffer, formatInfo &info, arg &args, cBuffer 
 void AFormat::binHandle(char *&tempBuffer, formatInfo &info, arg &args, cBuffer &tempStr)
 {
 	char *container = tempStr.data();
+
+	if (info.isPreFix)
+	{
+		*container = 'b';
+		container++;
+	}
 
 	if (info.isLong)
 	{
@@ -1247,7 +1253,7 @@ const char *AFormat::integerToStr(T num, int bits, char *container)
 	return temp;
 }
 
-/*powº¯ÊıµÄ×÷ÕßÊÇÁõÖÇî£*/
+/*powå‡½æ•°çš„ä½œè€…æ˜¯åˆ˜æ™ºç¿*/
 double AFormat::pow(double m)
 {
 	int i, j;
@@ -1276,14 +1282,14 @@ void *AFormat::memCpy(void *des, const void  *src, size_t count)
 	const char *p = reinterpret_cast<const char *>(src);
 	char *q = reinterpret_cast<char *>(des);
 
-	if ((p > q) || (p + count < q))//srcÓëdesÎŞÖØµşµÄÇé¿ö
+	if ((p > q) || (p + count < q))//srcä¸desæ— é‡å çš„æƒ…å†µ
 	{
 		for (size_t i = 0; i < count; i++)
 		{
 			q[i] = p[i];
 		}
 	}
-	else//srcÓëdesÓĞÖØµş
+	else//srcä¸desæœ‰é‡å 
 	{
 		for (size_t i = count - 1; i <count; i--)
 		{
